@@ -1,0 +1,24 @@
+pipeline { 
+    agent any 
+    stages { 
+        stage('Checkout') { 
+            steps { 
+                git branch: 'main', url: 'https://github.com/BernardHwang/CICD-Java.git' 
+            } 
+        } 
+        stage('Build + Test + Deploy') { 
+            parallel {
+                stage('Build') {
+                    steps { sh './gradlew build'} 
+                }
+                 stage('Test') { 
+                    steps { sh './gradlew test'}  
+                } 
+                stage('Deploy') { 
+                    steps {  
+                        sh 'docker build -t cicd-java:1st .' 
+                    }            
+                }   
+            }
+        } 
+} 

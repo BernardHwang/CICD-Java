@@ -1,0 +1,24 @@
+# Stage 1: Build the application
+FROM gradle:8.10.2-jdk17-slim AS builder
+WORKDIR /app
+
+# Copy Gradle build files first (for caching)
+COPY build.gradle settings.gradle* ./
+COPY gradle gradle
+RUN gradle build --no-daemon || return 0
+
+# Copy source code
+COPY src src
+
+# Build the JAR
+RUN gradle clean build --no-daemon
+
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# Copy JAR from builder stage
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]
