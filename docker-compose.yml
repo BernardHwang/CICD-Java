@@ -6,5 +6,6 @@ services:
       - "8080:8080"
       - "50000:50000"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - .jenkins:/var/jenkins_home
     restart: unless-stopped
