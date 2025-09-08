@@ -4,8 +4,7 @@ pipeline {
         stage('Checkout') { 
             steps { 
                 git branch: 'main', url: 'https://github.com/BernardHwang/CICD-Java.git' 
-                sh 'chmod +x gradlew' 
-                sh 'chmod +x /usr/bin/docker'
+                sh 'chmod +x gradlew'
             } 
         } 
         stage('Build + Test + Deploy') { 
